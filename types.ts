@@ -15,3 +15,13 @@ export interface VocabularyItem {
   translation_vi: string;
   translation_en: string;
 }
+
+export interface PresentationItem {
+  id: number;
+  question_ru: string;
+  question_vi: string;
+  question_en: string;
+  answer_ru: string;
+  answer_vi: string;
+  answer_en: string;
+}

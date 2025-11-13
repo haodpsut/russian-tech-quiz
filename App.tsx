@@ -2,10 +2,13 @@
 import React, { useState, useCallback } from 'react';
 import Flashcard from './components/Flashcard';
 import VocabularyCard from './components/VocabularyCard';
+import PresentationCard from './components/PresentationCard';
 import Controls from './components/Controls';
 import ModeSelector from './components/ModeSelector';
 import { flashcards } from './constants/data';
 import { vocabulary } from './constants/vocabulary';
+import { presentationData } from './constants/presentation';
+
 
 // Add custom CSS for 3D transform effects
 const customStyles = `
@@ -15,13 +18,26 @@ const customStyles = `
   .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 `;
 
-type Mode = 'concepts' | 'vocabulary';
+export type Mode = 'concepts' | 'vocabulary' | 'presentation';
 
 const App: React.FC = () => {
   const [mode, setMode] = useState<Mode>('concepts');
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const data = mode === 'concepts' ? flashcards : vocabulary;
+  const getData = () => {
+    switch (mode) {
+      case 'concepts':
+        return flashcards;
+      case 'vocabulary':
+        return vocabulary;
+      case 'presentation':
+        return presentationData;
+      default:
+        return [];
+    }
+  };
+  
+  const data = getData();
   const currentCard = data[currentIndex];
   
   const handleNext = useCallback(() => {
@@ -36,6 +52,22 @@ const App: React.FC = () => {
     setMode(newMode);
     setCurrentIndex(0); // Reset index when changing mode
   };
+  
+  const renderCard = () => {
+    if (!currentCard) return null;
+
+    switch (mode) {
+      case 'concepts':
+        return <Flashcard key={`concept-${currentCard.id}`} card={currentCard} />;
+      case 'vocabulary':
+        return <VocabularyCard key={`vocab-${currentCard.id}`} card={currentCard} />;
+      case 'presentation':
+        return <PresentationCard key={`presentation-${currentCard.id}`} item={currentCard} />;
+      default:
+        return null;
+    }
+  };
+
 
   return (
     <>
@@ -53,11 +85,7 @@ const App: React.FC = () => {
         <ModeSelector currentMode={mode} onSelectMode={handleModeChange} />
 
         <main className="w-full max-w-4xl h-[50vh] md:h-[60vh] flex-grow flex items-center justify-center mb-8">
-          {data.length > 0 && currentCard && (
-            mode === 'concepts' 
-              ? <Flashcard key={`concept-${currentCard.id}`} card={currentCard} /> 
-              : <VocabularyCard key={`vocab-${currentCard.id}`} card={currentCard} />
-          )}
+          {data.length > 0 && renderCard()}
         </main>
 
         <footer className="w-full flex justify-center">
