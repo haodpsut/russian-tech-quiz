@@ -1,0 +1,5 @@
+{
+  "name": "Russian Technical Terms Quizlet",
+  "description": "A Quizlet-style flashcard application to help study and review technical terms and concepts in Russian, with translations in Vietnamese and English, based on dissertation materials.",
+  "requestFramePermissions": []
+}
