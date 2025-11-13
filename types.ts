@@ -8,3 +8,10 @@ export interface Flashcard {
   explanation_vi: string;
   explanation_en: string;
 }
+
+export interface VocabularyItem {
+  id: number;
+  term_ru: string;
+  translation_vi: string;
+  translation_en: string;
+}
